@@ -1,10 +1,20 @@
 <head>
     <title>Owenn</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $("#Hello").fadeIn(1000);
+        $("#Welcome").delay(2000).fadeIn(1000);
+        $("#All").delay(4000).fadeIn(1000);
+        $("#For").delay(6000).fadeIn(1000);
+    });
+    </script>
 </head>
 <body style="background-color:343546">
     <center>
-        <div style="color:red;font-size: 100;">
-		    Hello
-        </div>
+        <div id="Hello" style="color:red;font-size: 100; display:none;">Hello</div>
+        <div id="Welcome" style="color:red;font-size: 100; display:none;">Welcome</div>
+        <div id="All" style="color:red;font-size: 100; display:none;">That is all</div>
+        <div id="For" style="color:red;font-size: 100; display:none;">For now...</div>
     </center>
 </body>
