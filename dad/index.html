@@ -1,0 +1,50 @@
+<head>
+    <title>Dad's Steem</title>
+    <script src="https://cdn.jsdelivr.net/npm/steem/dist/steem.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var steemUsd
+        var steemBtc
+        $.totalUsdAppear = function() {
+            $("#usdValue").fadeIn(1000);
+        };
+        $.totalBtcAppear = function() {
+            $("#btcValue").fadeIn(1000);
+        };
+        const Http = new XMLHttpRequest();
+        const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM&vs_currencies=btc,usd';
+        Http.open("GET", url);
+        Http.responseType = "json"
+        Http.send();
+        Http.onreadystatechange = (e) => {
+            steemBtc = Http.response['steem']['btc'];
+            steemUsd = Http.response['steem']['usd'];
+            console.log(steemBtc)
+            console.log(steemUsd)
+        }
+        window.onload = function(){
+            steem.api.getAccounts(["zerothree"], function(e1, accounts) {
+                steem.api.getState("/@zerothree", function (e2, state) {        
+                    var vestingSteem = steem.formatter.vestingSteem(accounts[0], state.props);	
+                    vestingSteem = Math.round(vestingSteem * 1000) / 1000
+                    console.log(vestingSteem)
+                    document.getElementById('totalSteem').innerHTML = 'Total Steem: ' + vestingSteem;
+                    document.getElementById('usdValue').innerHTML = 'Value in USD: $' + Math.round(vestingSteem * steemUsd * 100) / 100;
+                    $.totalUsdAppear();
+                    document.getElementById('btcValue').innerHTML = 'Value in BTC: ' + Math.round(vestingSteem * steemBtc * 1000000) / 1000000 + ' BTC';
+                    $.totalBtcAppear();
+                });
+                });
+
+        }
+    </script>
+</head>
+<body style="background-color:343546">
+    <center>
+        <div>
+		    <div id="totalSteem" style="color:rgb(22, 164, 230); font-size: 80;">loading...</div><br>
+            <div id="usdValue" style="color:rgb(22, 164, 230); font-size: 80; display:none;">Value in USD: $0.00</div>
+            <div id="btcValue" style="color:rgb(22, 164, 230); font-size: 80; display:none;">Value in BTC: 0.00 BTC</div>
+        </div>
+    </center>
+</body>
