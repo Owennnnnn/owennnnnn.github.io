@@ -17,10 +17,12 @@
         Http.responseType = "json"
         Http.send();
         Http.onreadystatechange = (e) => {
-            steemBtc = Http.response['steem']['btc'];
-            steemUsd = Http.response['steem']['usd'];
-            console.log(steemBtc)
-            console.log(steemUsd)
+            if (Http.readyState === 4) {
+                steemBtc = Http.response['steem']['btc'];
+                steemUsd = Http.response['steem']['usd'];
+                console.log(steemBtc)
+                console.log(steemUsd)
+            }
         }
         window.onload = function(){
             steem.api.getAccounts(["zerothree"], function(e1, accounts) {
