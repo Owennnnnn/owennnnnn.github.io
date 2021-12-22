@@ -28,6 +28,7 @@
             steem.api.getAccounts(["zerothree"], function(e1, accounts) {
                 if(e1){
                     document.getElementById('totalSteem').innerHTML = 'Error 504 (not my fault node down)';
+                    console.log(e1);
                 }
                 else
                 steem.api.getState("/@zerothree", function (e2, state) {        
