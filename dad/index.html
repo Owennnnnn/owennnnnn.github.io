@@ -24,16 +24,18 @@
                 console.log(steemUsd)
             }
         }
-        window.onload = function(){
+        window.onload = function steemFunction(){
             steem.api.getAccounts(["zerothree"], function(e1, accounts) {
                 if(e1){
-                    document.getElementById('totalSteem').innerHTML = 'Error 504 (not my fault node down)';
-                    document.getElementById('usdValue').innerHTML = 'Try again later I guess';
-                    $.totalUsdAppear();
                     console.log(e1);
+                    steemFunction()
                 }
                 else
-                steem.api.getState("/@zerothree", function (e2, state) {        
+                steem.api.getState("/@zerothree", function (e2, state) {
+                    if(e2){
+                        steemFunction()
+                    }
+                    else
                     var vestingSteem = steem.formatter.vestingSteem(accounts[0], state.props);	
                     vestingSteem = Math.round(vestingSteem * 1000) / 1000
                     console.log(vestingSteem)
