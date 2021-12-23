@@ -4,7 +4,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         var steemUsd
-        var steemBtc
+        var steemBtc = 0
         const Http = new XMLHttpRequest();
         const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM&vs_currencies=btc,usd';
         Http.open("GET", url);
@@ -16,6 +16,29 @@
                 steemUsd = Http.response['steem']['usd'];
                 console.log(steemBtc)
                 console.log(steemUsd)
+            }
+        }
+        function calc(accounts, state){
+            if(steemBtc == 0){
+                setTimeout(calc, 1000, accounts, state)
+            }
+            else {
+                var vestingSteem = steem.formatter.vestingSteem(accounts[0], state.props);	
+                vestingSteem = Math.round(vestingSteem * 1000) / 1000
+                console.log(vestingSteem)
+                document.getElementById('totalSteem').innerHTML = 'Total Steem: ' + vestingSteem;
+                document.getElementById('usdValue').innerHTML = 'Value in USD: $' + Math.round(vestingSteem * steemUsd * 100) / 100;
+                document.getElementById('btcValue').innerHTML = 'Value in BTC: ' + Math.round(vestingSteem * steemBtc * 1000000) / 1000000 + ' BTC';
+                if(vestingSteem * steemUsd > 3923.40){
+                    document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - 3923.40) * 100) / 100;
+                }
+                else
+                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100;
+                if(vestingSteem * steemBtc > 0.08){
+                    document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - 0.08) * 1000000) / 1000000 + ' BTC';
+                }
+                else
+                document.getElementById('btcLoss').innerHTML = 'Loss: ' + Math.round((0.08 - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC';
             }
         }
         window.onload = function steemFunction(){
@@ -30,23 +53,8 @@
                         steemFunction()
                     }
                     else
-                    var vestingSteem = steem.formatter.vestingSteem(accounts[0], state.props);	
-                    vestingSteem = Math.round(vestingSteem * 1000) / 1000
-                    console.log(vestingSteem)
-                    document.getElementById('totalSteem').innerHTML = 'Total Steem: ' + vestingSteem;
-                    document.getElementById('usdValue').innerHTML = 'Value in USD: $' + Math.round(vestingSteem * steemUsd * 100) / 100;
-                    document.getElementById('btcValue').innerHTML = 'Value in BTC: ' + Math.round(vestingSteem * steemBtc * 1000000) / 1000000 + ' BTC';
-                    if(vestingSteem * steemUsd > 3923.40){
-                        document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - 3923.40) * 100) / 100;
-                    }
-                    else
-                    document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100;
-                    if(vestingSteem * steemBtc > 0.08){
-                        document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - 0.08) * 1000000) / 1000000 + ' BTC';
-                    }
-                    else
-                    document.getElementById('btcLoss').innerHTML = 'Loss: ' + Math.round((0.08 - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC';
-                });
+                        calc(accounts, state)
+                    });
                 });
 
         }
