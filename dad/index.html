@@ -6,6 +6,9 @@
         var steemUsd
         var steemBtc = 0
         const Http = new XMLHttpRequest();
+        const startUsd = 3923.40
+        const startSteem = 8871.990
+        const startBtc = 0.08
         const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM&vs_currencies=btc,usd';
         Http.open("GET", url);
         Http.responseType = "json"
@@ -26,19 +29,22 @@
                 var vestingSteem = steem.formatter.vestingSteem(accounts[0], state.props);	
                 vestingSteem = Math.round(vestingSteem * 1000) / 1000
                 console.log(vestingSteem)
-                document.getElementById('totalSteem').innerHTML = 'Total Steem: ' + vestingSteem;
+                document.getElementById('totalSteem').innerHTML = 'Total Steem: ' + vestingSteem + "<span style='color: teal;'> +" + Math.round((vestingSteem / startSteem - 1) * 10000) / 100 + '% (+' + Math.round((vestingSteem - startSteem) * 100) / 100 + " steem)</span>";
                 document.getElementById('usdValue').innerHTML = 'Value in USD: $' + Math.round(vestingSteem * steemUsd * 100) / 100;
                 document.getElementById('btcValue').innerHTML = 'Value in BTC: ' + Math.round(vestingSteem * steemBtc * 1000000) / 1000000 + ' BTC';
-                if(vestingSteem * steemUsd > 3923.40){
-                    document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - 3923.40) * 100) / 100;
+                percentStr = Math.round(((vestingSteem * steemUsd) / startUsd - 1) * 10000) / 100 + '%';
+                if(vestingSteem * steemUsd > startUsd){
+                    document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - startUsd) * 100) / 100 + ' ' + "<span style='color: teal;'>+" + percentStr + "</span>";
                 }
                 else
-                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100;
-                if(vestingSteem * steemBtc > 0.08){
-                    document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - 0.08) * 1000000) / 1000000 + ' BTC';
+                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100 + ' ' + "<span style='color: IndianRed;'>+" + percentStr + "</span>";
+                btcPercentStr = Math.round(((vestingSteem * steemBtc) / startBtc - 1) * 10000) / 100 + '%'
+                if(vestingSteem * steemBtc > startBtc){
+                    document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - startBtc) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: teal;'>+" + btcPercentStr + "</span>";
                 }
-                else
-                document.getElementById('btcLoss').innerHTML = 'Loss: ' + Math.round((0.08 - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC';
+                else{
+                    document.getElementById('btcLoss').innerHTML = 'Loss: ' + Math.round((startBtc - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: IndianRed;'>" + btcPercentStr + "</span>";
+                }
             }
         }
         window.onload = function steemFunction(){
