@@ -37,7 +37,7 @@
                     document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - startUsd) * 100) / 100 + ' ' + "<span style='color: teal;'>+" + percentStr + "</span>";
                 }
                 else
-                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100 + ' ' + "<span style='color: IndianRed;'>+" + percentStr + "</span>";
+                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100 + ' ' + "<span style='color: IndianRed;'>" + percentStr + "</span>";
                 btcPercentStr = Math.round(((vestingSteem * steemBtc) / startBtc - 1) * 10000) / 100 + '%'
                 if(vestingSteem * steemBtc > startBtc){
                     document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - startBtc) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: teal;'>+" + btcPercentStr + "</span>";
