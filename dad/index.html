@@ -9,7 +9,7 @@
         const startUsd = 3923.40
         const startSteem = 8871.990
         const startBtc = 0.08
-        const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM&vs_currencies=btc,usd';
+        const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM,Bitcoin&vs_currencies=btc,usd';
         Http.open("GET", url);
         Http.responseType = "json"
         Http.send();
@@ -17,6 +17,7 @@
             if (Http.readyState === 4) {
                 steemBtc = Http.response['steem']['btc'];
                 steemUsd = Http.response['steem']['usd'];
+                btcUsd = Http.response['bitcoin']['usd'];
                 console.log(steemBtc)
                 console.log(steemUsd)
             }
@@ -34,16 +35,22 @@
                 document.getElementById('btcValue').innerHTML = 'Value in BTC: ' + Math.round(vestingSteem * steemBtc * 1000000) / 1000000 + ' BTC';
                 percentStr = Math.round(((vestingSteem * steemUsd) / startUsd - 1) * 10000) / 100 + '%';
                 if(vestingSteem * steemUsd > startUsd){
-                    document.getElementById('profit').innerHTML = 'Profit: $' + Math.round(((vestingSteem * steemUsd) - startUsd) * 100) / 100 + ' ' + "<span style='color: teal;'>+" + percentStr + "</span>";
+                    document.getElementById('profit').innerHTML = 'USD Value Profit: $' + Math.round(((vestingSteem * steemUsd) - startUsd) * 100) / 100 + ' ' + "<span style='color: teal;'>+" + percentStr + "</span>";
                 }
                 else
-                document.getElementById('loss').innerHTML = 'Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100 + ' ' + "<span style='color: IndianRed;'>" + percentStr + "</span>";
+                document.getElementById('loss').innerHTML = 'USD Value Loss: $' + Math.round((3923.40 - (vestingSteem * steemUsd)) * 100) / 100 + ' ' + "<span style='color: IndianRed;'>" + percentStr + "</span>";
                 btcPercentStr = Math.round(((vestingSteem * steemBtc) / startBtc - 1) * 10000) / 100 + '%'
                 if(vestingSteem * steemBtc > startBtc){
-                    document.getElementById('btcProfit').innerHTML = 'Profit: ' + Math.round(((vestingSteem * steemBtc) - startBtc) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: teal;'>+" + btcPercentStr + "</span>";
+                    document.getElementById('btcProfit').innerHTML = 'BTC Value Profit: ' + Math.round(((vestingSteem * steemBtc) - startBtc) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: teal;'>+" + btcPercentStr + "</span>";
                 }
                 else{
-                    document.getElementById('btcLoss').innerHTML = 'Loss: ' + Math.round((startBtc - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: IndianRed;'>" + btcPercentStr + "</span>";
+                    document.getElementById('btcLoss').innerHTML = 'BTC Value Loss: ' + Math.round((startBtc - (vestingSteem * steemBtc)) * 1000000) / 1000000 + ' BTC' + ' ' + "<span style='color: IndianRed;'>" + btcPercentStr + "</span>";
+                }
+                if(Math.round(vestingSteem * steemUsd * 100) / 100 > Math.round(btcUsd * startBtc * 100) / 100){
+                    document.getElementById('relativeProfit').innerHTML = 'Relative USD Profit: $' + (Math.round(((Math.round(vestingSteem * steemUsd * 100) / 100) - (Math.round(btcUsd * startBtc * 100) / 100)) * 100) / 100)
+                }
+                else{
+                    document.getElementById('relativeLoss').innerHTML = 'Relative USD Loss: $' + (Math.round(((Math.round(btcUsd * startBtc * 100) / 100) - (Math.round(vestingSteem * steemUsd * 100) / 100)) * 100) / 100)
                 }
             }
         }
@@ -81,5 +88,7 @@
         <div id="loss" style="color:red; font-size: 60;"></div>
         <div id="btcProfit" style="color:rgb(22, 230, 32); font-size: 60;"></div>
         <div id="btcLoss" style="color:red; font-size: 60;"></div>
+        <div id="relativeProfit" style="color:rgb(22, 230, 32); font-size: 60;"></div>
+        <div id="relativeLoss" style="color:red; font-size: 60;"></div>
     </center>
 </body>
