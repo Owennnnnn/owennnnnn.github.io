@@ -6,9 +6,9 @@
         var steemUsd
         var steemBtc = 0
         const Http = new XMLHttpRequest();
-        const startUsd = 6433.77
-        const startSteem = 14769.990
-        const startBtc = 0.142
+        const startUsd = 7433.77
+        const startSteem = 19499.398
+        const startBtc = 0.191
         const url='https://api.coingecko.com/api/v3/simple/price?ids=STEEM,Bitcoin&vs_currencies=btc,usd';
         Http.open("GET", url);
         Http.responseType = "json"
@@ -81,8 +81,8 @@
             <div id="btcValue" style="color:rgb(22, 164, 230); font-size: 60;"></div>
         </div>
         <div style="color:greenyellow; left: 50%; bottom: 0;">
-        Initial investment: 14769.990 Steem<br></br>
-        AKA 0.142 BTC or 6433.77 USD
+        Initial investment: 19499.398 Steem<br></br>
+        AKA 0.191 BTC or 7433.77 USD
         </div>
         <div id="profit" style="color:rgb(22, 230, 32); font-size: 60;"></div>
         <div id="loss" style="color:red; font-size: 60;"></div>
